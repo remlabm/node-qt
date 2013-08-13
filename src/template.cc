@@ -16,18 +16,17 @@
 //       names of contributors may be used to endorse or promote products
 //       derived from this software without specific prior written permission.
 //
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
-// AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+// AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
 // ARE DISCLAIMED. IN NO EVENT SHALL ARTUR ADIB BE LIABLE FOR ANY
 // DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
 // (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
 // LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
 // ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF 
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#define BUILDING_NODE_EXTENSION
 #include <node.h>
 #include "__template__.h"
 
@@ -37,7 +36,7 @@ Persistent<Function> __Template__Wrap::constructor;
 
 // Supported implementations:
 //   __Template__ ( ??? )
-__Template__Wrap::__Template__Wrap(const Arguments& args) : q_(NULL) {
+__Template__Wrap::__Template__Wrap(_NAN_METHOD_ARGS) : q_(NULL) {
   q_ = new __Template__;
 }
 
@@ -49,42 +48,42 @@ void __Template__Wrap::Initialize(Handle<Object> target) {
   // Prepare constructor template
   Local<FunctionTemplate> tpl = FunctionTemplate::New(New);
   tpl->SetClassName(String::NewSymbol("__Template__"));
-  tpl->InstanceTemplate()->SetInternalFieldCount(1);  
+  tpl->InstanceTemplate()->SetInternalFieldCount(1);
 
   // Prototype
   tpl->PrototypeTemplate()->Set(String::NewSymbol("example"),
       FunctionTemplate::New(Example)->GetFunction());
 
-  constructor = Persistent<Function>::New(tpl->GetFunction());
-  target->Set(String::NewSymbol("__Template__"), constructor);
+  NanAssignPersistent(Function, constructor, tpl->GetFunction());
+  target->Set(String::NewSymbol("__Template__"), tpl->GetFunction());
 }
 
-Handle<Value> __Template__Wrap::New(const Arguments& args) {
-  HandleScope scope;
+NAN_METHOD(__Template__Wrap::New) {
+  NanScope();
 
   __Template__Wrap* w = new __Template__Wrap(args);
   w->Wrap(args.This());
 
-  return args.This();
+  NanReturnValue(args.This());
 }
 
 Handle<Value> __Template__Wrap::NewInstance(__Template__ q) {
-  HandleScope scope;
-  
-  Local<Object> instance = constructor->NewInstance(0, NULL);
+  NanScope():
+
+  Local<Object> instance = NanPersistentToLocal(constructor)->NewInstance(0, NULL);
   __Template__Wrap* w = node::ObjectWrap::Unwrap<__Template__Wrap>(instance);
   w->SetWrapped(q);
 
   return scope.Close(instance);
 }
 
-Handle<Value> __Template__Wrap::Example(const Arguments& args) {
-  HandleScope scope;
+NAN_METHOD(__Template__Wrap::Example) {
+  NanScope();
 
   __Template__Wrap* w = ObjectWrap::Unwrap<__Template__Wrap>(args.This());
   __Template__* q = w->GetWrapped();
 
   // q->...?
 
-  return scope.Close(Undefined());
+  NanReturnUndefined();
 }

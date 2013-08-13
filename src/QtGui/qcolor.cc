@@ -16,18 +16,17 @@
 //       names of contributors may be used to endorse or promote products
 //       derived from this software without specific prior written permission.
 //
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
-// AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+// AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
 // ARE DISCLAIMED. IN NO EVENT SHALL ARTUR ADIB BE LIABLE FOR ANY
 // DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
 // (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
 // LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
 // ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF 
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#define BUILDING_NODE_EXTENSION
 #include <node.h>
 #include "qcolor.h"
 #include "../qt_v8.h"
@@ -40,7 +39,7 @@ Persistent<Function> QColorWrap::constructor;
 //   QColor ( int r, int g, int b, int a = 255 )
 //   QColor ( QString color )
 //   QColor ( QColor )
-QColorWrap::QColorWrap(const Arguments& args) {
+QColorWrap::QColorWrap(_NAN_METHOD_ARGS) {
   if (args.Length() >= 3) {
     // QColor ( int r, int g, int b, int a = 255 )
     q_ = new QColor(
@@ -58,8 +57,7 @@ QColorWrap::QColorWrap(const Arguments& args) {
         qt_v8::ToQString(args[0]->ToObject()->GetConstructorName());
 
     if (arg0_constructor != "QColor")
-      ThrowException(Exception::TypeError(
-        String::New("QColor::QColor: bad argument")));
+      NanThrowTypeError("QColor::QColor: bad argument");
 
     // Unwrap obj
     QColorWrap* q_wrap = ObjectWrap::Unwrap<QColorWrap>(
@@ -78,7 +76,7 @@ void QColorWrap::Initialize(Handle<Object> target) {
   // Prepare constructor template
   Local<FunctionTemplate> tpl = FunctionTemplate::New(New);
   tpl->SetClassName(String::NewSymbol("QColor"));
-  tpl->InstanceTemplate()->SetInternalFieldCount(1);  
+  tpl->InstanceTemplate()->SetInternalFieldCount(1);
 
   // Prototype
   tpl->PrototypeTemplate()->Set(String::NewSymbol("red"),
@@ -92,62 +90,62 @@ void QColorWrap::Initialize(Handle<Object> target) {
   tpl->PrototypeTemplate()->Set(String::NewSymbol("name"),
       FunctionTemplate::New(Name)->GetFunction());
 
-  constructor = Persistent<Function>::New(tpl->GetFunction());
-  target->Set(String::NewSymbol("QColor"), constructor);
+  NanAssignPersistent(Function, constructor, tpl->GetFunction());
+  target->Set(String::NewSymbol("QColor"), tpl->GetFunction());
 }
 
-Handle<Value> QColorWrap::New(const Arguments& args) {
-  HandleScope scope;
+NAN_METHOD(QColorWrap::New) {
+  NanScope();
 
   QColorWrap* w = new QColorWrap(args);
   w->Wrap(args.This());
 
-  return args.This();
+  NanReturnValue(args.This());
 }
 
-Handle<Value> QColorWrap::Red(const Arguments& args) {
-  HandleScope scope;
+NAN_METHOD(QColorWrap::Red) {
+  NanScope();
 
   QColorWrap* w = ObjectWrap::Unwrap<QColorWrap>(args.This());
   QColor* q = w->GetWrapped();
 
-  return scope.Close(Number::New(q->red()));
+  NanReturnValue(Number::New(q->red()));
 }
 
-Handle<Value> QColorWrap::Green(const Arguments& args) {
-  HandleScope scope;
+NAN_METHOD(QColorWrap::Green) {
+  NanScope();
 
   QColorWrap* w = ObjectWrap::Unwrap<QColorWrap>(args.This());
   QColor* q = w->GetWrapped();
 
-  return scope.Close(Number::New(q->green()));
+  NanReturnValue(Number::New(q->green()));
 }
 
-Handle<Value> QColorWrap::Blue(const Arguments& args) {
-  HandleScope scope;
+NAN_METHOD(QColorWrap::Blue) {
+  NanScope();
 
   QColorWrap* w = ObjectWrap::Unwrap<QColorWrap>(args.This());
   QColor* q = w->GetWrapped();
 
-  return scope.Close(Number::New(q->blue()));
+  NanReturnValue(Number::New(q->blue()));
 }
 
-Handle<Value> QColorWrap::Alpha(const Arguments& args) {
-  HandleScope scope;
+NAN_METHOD(QColorWrap::Alpha) {
+  NanScope();
 
   QColorWrap* w = ObjectWrap::Unwrap<QColorWrap>(args.This());
   QColor* q = w->GetWrapped();
 
-  return scope.Close(Number::New(q->alpha()));
+  NanReturnValue(Number::New(q->alpha()));
 }
 
-Handle<Value> QColorWrap::Name(const Arguments& args) {
-  HandleScope scope;
+NAN_METHOD(QColorWrap::Name) {
+  NanScope();
 
   QColorWrap* w = ObjectWrap::Unwrap<QColorWrap>(args.This());
   QColor* q = w->GetWrapped();
 
   QString name = q->name();
 
-  return scope.Close(qt_v8::FromQString(name));
+  NanReturnValue(qt_v8::FromQString(name));
 }

@@ -16,23 +16,23 @@
 //       names of contributors may be used to endorse or promote products
 //       derived from this software without specific prior written permission.
 //
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
-// AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+// AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
 // ARE DISCLAIMED. IN NO EVENT SHALL ARTUR ADIB BE LIABLE FOR ANY
 // DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
 // (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
 // LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
 // ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF 
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #ifndef QPAINTERPATHWRAP_H
 #define QPAINTERPATHWRAP_H
 
-#define BUILDING_NODE_EXTENSION
 #include <node.h>
 #include <QPainterPath>
+#include "../nan.h"
 
 class QPainterPathWrap : public node::ObjectWrap {
  public:
@@ -40,16 +40,16 @@ class QPainterPathWrap : public node::ObjectWrap {
   QPainterPath* GetWrapped() const { return q_; };
 
  private:
-  QPainterPathWrap(const v8::Arguments& args);
+  QPainterPathWrap(_NAN_METHOD_ARGS);
   ~QPainterPathWrap();
   static v8::Persistent<v8::Function> constructor;
-  static v8::Handle<v8::Value> New(const v8::Arguments& args);
+  static NAN_METHOD(New);
 
   // Wrapped methods
-  static v8::Handle<v8::Value> MoveTo(const v8::Arguments& args);
-  static v8::Handle<v8::Value> CurrentPosition(const v8::Arguments& args);
-  static v8::Handle<v8::Value> LineTo(const v8::Arguments& args);
-  static v8::Handle<v8::Value> CloseSubpath(const v8::Arguments& args);
+  static NAN_METHOD(MoveTo);
+  static NAN_METHOD(CurrentPosition);
+  static NAN_METHOD(LineTo);
+  static NAN_METHOD(CloseSubpath);
 
   // Wrapped object
   QPainterPath* q_;

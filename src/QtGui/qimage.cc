@@ -16,18 +16,17 @@
 //       names of contributors may be used to endorse or promote products
 //       derived from this software without specific prior written permission.
 //
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
-// AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+// AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
 // ARE DISCLAIMED. IN NO EVENT SHALL ARTUR ADIB BE LIABLE FOR ANY
 // DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
 // (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
 // LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
 // ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF 
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#define BUILDING_NODE_EXTENSION
 #include <node.h>
 #include "qimage.h"
 #include "../qt_v8.h"
@@ -39,15 +38,15 @@ Persistent<Function> QImageWrap::constructor;
 // Supported implementations:
 //   QImage ( )
 //   QImage ( QString filename )
-QImageWrap::QImageWrap(const Arguments& args) {
+QImageWrap::QImageWrap(_NAN_METHOD_ARGS) {
   if (args[0]->IsString()) {
-    // QImage ( QString filename ) 
+    // QImage ( QString filename )
     q_ = new QImage(qt_v8::ToQString(args[0]->ToString()));
     return;
   }
 
   // QImage ( )
-  q_ = new QImage(qt_v8::ToQString(args[0]->ToString()));  
+  q_ = new QImage(qt_v8::ToQString(args[0]->ToString()));
 }
 
 QImageWrap::~QImageWrap() {
@@ -58,30 +57,30 @@ void QImageWrap::Initialize(Handle<Object> target) {
   // Prepare constructor template
   Local<FunctionTemplate> tpl = FunctionTemplate::New(New);
   tpl->SetClassName(String::NewSymbol("QImage"));
-  tpl->InstanceTemplate()->SetInternalFieldCount(1);  
+  tpl->InstanceTemplate()->SetInternalFieldCount(1);
 
   // Prototype
   tpl->PrototypeTemplate()->Set(String::NewSymbol("isNull"),
       FunctionTemplate::New(IsNull)->GetFunction());
 
-  constructor = Persistent<Function>::New(tpl->GetFunction());
-  target->Set(String::NewSymbol("QImage"), constructor);
+  NanAssignPersistent(Function, constructor, tpl->GetFunction());
+  target->Set(String::NewSymbol("QImage"), tpl->GetFunction());
 }
 
-Handle<Value> QImageWrap::New(const Arguments& args) {
-  HandleScope scope;
+NAN_METHOD(QImageWrap::New) {
+  NanScope();
 
   QImageWrap* w = new QImageWrap(args);
   w->Wrap(args.This());
 
-  return args.This();
+  NanReturnValue(args.This());
 }
 
-Handle<Value> QImageWrap::IsNull(const Arguments& args) {
-  HandleScope scope;
+NAN_METHOD(QImageWrap::IsNull) {
+  NanScope();
 
   QImageWrap* w = ObjectWrap::Unwrap<QImageWrap>(args.This());
   QImage* q = w->GetWrapped();
 
-  return scope.Close(Boolean::New(q->isNull()));
+  NanReturnValue(Boolean::New(q->isNull()));
 }

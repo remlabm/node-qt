@@ -16,23 +16,23 @@
 //       names of contributors may be used to endorse or promote products
 //       derived from this software without specific prior written permission.
 //
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
-// AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+// AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
 // ARE DISCLAIMED. IN NO EVENT SHALL ARTUR ADIB BE LIABLE FOR ANY
 // DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
 // (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
 // LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
 // ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF 
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #ifndef QPAINTERWRAP_H
 #define QPAINTERWRAP_H
 
-#define BUILDING_NODE_EXTENSION
 #include <node.h>
 #include <QPainter>
+#include "../nan.h"
 
 class QPainterWrap : public node::ObjectWrap {
  public:
@@ -43,29 +43,29 @@ class QPainterWrap : public node::ObjectWrap {
   QPainterWrap();
   ~QPainterWrap();
   static v8::Persistent<v8::Function> constructor;
-  static v8::Handle<v8::Value> New(const v8::Arguments& args);
+  static NAN_METHOD(New);
 
   //
   // Wrapped methods exposed to JS
   //
 
-  static v8::Handle<v8::Value> Begin(const v8::Arguments& args);
-  static v8::Handle<v8::Value> End(const v8::Arguments& args);
-  static v8::Handle<v8::Value> IsActive(const v8::Arguments& args);
-  static v8::Handle<v8::Value> Save(const v8::Arguments& args);
-  static v8::Handle<v8::Value> Restore(const v8::Arguments& args);
+  static NAN_METHOD(Begin);
+  static NAN_METHOD(End);
+  static NAN_METHOD(IsActive);
+  static NAN_METHOD(Save);
+  static NAN_METHOD(Restore);
 
   // State
-  static v8::Handle<v8::Value> SetPen(const v8::Arguments& args);
-  static v8::Handle<v8::Value> SetFont(const v8::Arguments& args);
-  static v8::Handle<v8::Value> SetMatrix(const v8::Arguments& args);
+  static NAN_METHOD(SetPen);
+  static NAN_METHOD(SetFont);
+  static NAN_METHOD(SetMatrix);
 
   // Paint actions
-  static v8::Handle<v8::Value> FillRect(const v8::Arguments& args);
-  static v8::Handle<v8::Value> DrawText(const v8::Arguments& args);
-  static v8::Handle<v8::Value> DrawPixmap(const v8::Arguments& args);
-  static v8::Handle<v8::Value> DrawImage(const v8::Arguments& args);
-  static v8::Handle<v8::Value> StrokePath(const v8::Arguments& args);
+  static NAN_METHOD(FillRect);
+  static NAN_METHOD(DrawText);
+  static NAN_METHOD(DrawPixmap);
+  static NAN_METHOD(DrawImage);
+  static NAN_METHOD(StrokePath);
 
   // Wrapped object
   QPainter* q_;
