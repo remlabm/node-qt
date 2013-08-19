@@ -32,7 +32,7 @@
 
 #include <node.h>
 #include <QSize>
-#include "../nan.h"
+#include <nan.h>
 
 class QSizeWrap : public node::ObjectWrap {
  public:

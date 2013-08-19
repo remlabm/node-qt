@@ -32,7 +32,7 @@
 
 #include <node.h>
 #include <QMatrix>
-#include "../nan.h"
+#include <nan.h>
 
 class QMatrixWrap : public node::ObjectWrap {
  public:

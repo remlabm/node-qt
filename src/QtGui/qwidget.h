@@ -32,7 +32,7 @@
 
 #include <node.h>
 #include <QWidget>
-#include "../nan.h"
+#include <nan.h>
 
 //
 // QWidgetImpl()

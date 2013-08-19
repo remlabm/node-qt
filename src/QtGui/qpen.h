@@ -32,7 +32,7 @@
 
 #include <node.h>
 #include <QPen>
-#include "../nan.h"
+#include <nan.h>
 
 class QPenWrap : public node::ObjectWrap {
  public:

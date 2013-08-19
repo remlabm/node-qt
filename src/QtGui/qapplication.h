@@ -32,7 +32,7 @@
 
 #include <node.h>
 #include <QApplication>
-#include "../nan.h"
+#include <nan.h>
 
 class QApplicationWrap : public node::ObjectWrap {
  public:

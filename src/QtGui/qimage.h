@@ -32,7 +32,7 @@
 
 #include <node.h>
 #include <QImage>
-#include "../nan.h"
+#include <nan.h>
 
 class QImageWrap : public node::ObjectWrap {
  public:

@@ -32,7 +32,7 @@
 
 #include <node.h>
 #include <QFont>
-#include "../nan.h"
+#include <nan.h>
 
 class QFontWrap : public node::ObjectWrap {
  public:

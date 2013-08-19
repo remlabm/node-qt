@@ -32,7 +32,7 @@
 
 #include <node.h>
 #include <QPainter>
-#include "../nan.h"
+#include <nan.h>
 
 class QPainterWrap : public node::ObjectWrap {
  public:

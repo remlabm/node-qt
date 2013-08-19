@@ -32,7 +32,7 @@
 
 #include <node.h>
 #include <QScrollArea>
-#include "../nan.h"
+#include <nan.h>
 
 //
 // QScrollAreaWrap()

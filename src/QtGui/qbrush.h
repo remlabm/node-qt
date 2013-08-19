@@ -32,7 +32,7 @@
 
 #include <node.h>
 #include <QBrush>
-#include "../nan.h"
+#include <nan.h>
 
 class QBrushWrap : public node::ObjectWrap {
  public:

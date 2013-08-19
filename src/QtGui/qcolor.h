@@ -32,7 +32,7 @@
 
 #include <node.h>
 #include <QColor>
-#include "../nan.h"
+#include <nan.h>
 
 class QColorWrap : public node::ObjectWrap {
  public:

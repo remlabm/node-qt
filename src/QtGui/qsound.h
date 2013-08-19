@@ -32,7 +32,7 @@
 
 #include <node.h>
 #include <QSound>
-#include "../nan.h"
+#include <nan.h>
 
 class QSoundWrap : public node::ObjectWrap {
  public:

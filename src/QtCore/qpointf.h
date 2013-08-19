@@ -32,7 +32,7 @@
 
 #include <node.h>
 #include <QPointF>
-#include "../nan.h"
+#include <nan.h>
 
 class QPointFWrap : public node::ObjectWrap {
  public:

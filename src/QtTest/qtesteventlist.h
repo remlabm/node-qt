@@ -33,7 +33,7 @@
 #include <node.h>
 #define QT_GUI_LIB // necessary for QTestEventList
 #include <QTestEventList>
-#include "../nan.h"
+#include <nan.h>
 
 class QTestEventListWrap : public node::ObjectWrap {
  public:

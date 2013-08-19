@@ -32,7 +32,7 @@
 
 #include <node.h>
 #include <QPainterPath>
-#include "../nan.h"
+#include <nan.h>
 
 class QPainterPathWrap : public node::ObjectWrap {
  public:

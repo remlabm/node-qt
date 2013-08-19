@@ -32,7 +32,7 @@
 
 #include <node.h>
 #include <QKeyEvent>
-#include "../nan.h"
+#include <nan.h>
 
 class QKeyEventWrap : public node::ObjectWrap {
  public:

@@ -32,7 +32,7 @@
 
 #include <node.h>
 #include <QPixmap>
-#include "../nan.h"
+#include <nan.h>
 
 class QPixmapWrap : public node::ObjectWrap {
  public:

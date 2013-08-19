@@ -32,7 +32,7 @@
 
 #include <node.h>
 #include <QScrollBar>
-#include "../nan.h"
+#include <nan.h>
 
 class QScrollBarWrap : public node::ObjectWrap {
  public:

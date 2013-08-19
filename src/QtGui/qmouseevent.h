@@ -32,7 +32,7 @@
 
 #include <node.h>
 #include <QMouseEvent>
-#include "../nan.h"
+#include <nan.h>
 
 class QMouseEventWrap : public node::ObjectWrap {
  public:
