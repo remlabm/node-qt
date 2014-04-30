@@ -16,44 +16,44 @@
 //       names of contributors may be used to endorse or promote products
 //       derived from this software without specific prior written permission.
 //
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
-// AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+// AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
 // ARE DISCLAIMED. IN NO EVENT SHALL ARTUR ADIB BE LIABLE FOR ANY
 // DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
 // (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
 // LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
 // ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF 
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #ifndef QPOINTFWRAP_H
 #define QPOINTFWRAP_H
 
-#define BUILDING_NODE_EXTENSION
 #include <node.h>
 #include <QPointF>
+#include <nan.h>
 
 class QPointFWrap : public node::ObjectWrap {
  public:
   static void Initialize(v8::Handle<v8::Object> target);
   QPointF* GetWrapped() const { return q_; };
-  void SetWrapped(QPointF q) { 
-    if (q_) delete q_; 
-    q_ = new QPointF(q); 
+  void SetWrapped(QPointF q) {
+    if (q_) delete q_;
+    q_ = new QPointF(q);
   };
   static v8::Handle<v8::Value> NewInstance(QPointF q);
 
  private:
-  QPointFWrap(const v8::Arguments& args);
+  QPointFWrap(_NAN_METHOD_ARGS);
   ~QPointFWrap();
   static v8::Persistent<v8::Function> constructor;
-  static v8::Handle<v8::Value> New(const v8::Arguments& args);
+  static NAN_METHOD(New);
 
   // Wrapped methods
-  static v8::Handle<v8::Value> IsNull(const v8::Arguments& args);
-  static v8::Handle<v8::Value> X(const v8::Arguments& args);
-  static v8::Handle<v8::Value> Y(const v8::Arguments& args);
+  static NAN_METHOD(IsNull);
+  static NAN_METHOD(X);
+  static NAN_METHOD(Y);
 
   // Wrapped object
   QPointF* q_;

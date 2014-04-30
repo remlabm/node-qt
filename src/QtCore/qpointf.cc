@@ -16,18 +16,17 @@
 //       names of contributors may be used to endorse or promote products
 //       derived from this software without specific prior written permission.
 //
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
-// AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+// AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
 // ARE DISCLAIMED. IN NO EVENT SHALL ARTUR ADIB BE LIABLE FOR ANY
 // DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
 // (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
 // LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
 // ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF 
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#define BUILDING_NODE_EXTENSION
 #include <node.h>
 #include "qpointf.h"
 
@@ -37,7 +36,7 @@ Persistent<Function> QPointFWrap::constructor;
 
 // Supported implementations:
 //   QPointF (qreal x, qreal y)
-QPointFWrap::QPointFWrap(const Arguments& args) : q_(NULL) {
+QPointFWrap::QPointFWrap(_NAN_METHOD_ARGS) : q_(NULL) {
   if (args[0]->IsNumber() && args[1]->IsNumber()) {
     q_ = new QPointF(args[0]->NumberValue(), args[1]->NumberValue());
   } else {
@@ -53,7 +52,7 @@ void QPointFWrap::Initialize(Handle<Object> target) {
   // Prepare constructor template
   Local<FunctionTemplate> tpl = FunctionTemplate::New(New);
   tpl->SetClassName(String::NewSymbol("QPointF"));
-  tpl->InstanceTemplate()->SetInternalFieldCount(1);  
+  tpl->InstanceTemplate()->SetInternalFieldCount(1);
 
   // Prototype
   tpl->PrototypeTemplate()->Set(String::NewSymbol("x"),
@@ -63,52 +62,52 @@ void QPointFWrap::Initialize(Handle<Object> target) {
   tpl->PrototypeTemplate()->Set(String::NewSymbol("isNull"),
       FunctionTemplate::New(IsNull)->GetFunction());
 
-  constructor = Persistent<Function>::New(tpl->GetFunction());
-  target->Set(String::NewSymbol("QPointF"), constructor);
+  NanAssignPersistent(Function, constructor, tpl->GetFunction());
+  target->Set(String::NewSymbol("QPointF"), tpl->GetFunction());
 }
 
-Handle<Value> QPointFWrap::New(const Arguments& args) {
-  HandleScope scope;
+NAN_METHOD(QPointFWrap::New) {
+  NanScope();
 
   QPointFWrap* w = new QPointFWrap(args);
   w->Wrap(args.This());
 
-  return args.This();
+  NanReturnValue(args.This());
 }
 
 Handle<Value> QPointFWrap::NewInstance(QPointF q) {
-  HandleScope scope;
-  
-  Local<Object> instance = constructor->NewInstance(0, NULL);
+  NanScope();
+
+  Local<Object> instance = NanPersistentToLocal(constructor)->NewInstance(0, NULL);
   QPointFWrap* w = node::ObjectWrap::Unwrap<QPointFWrap>(instance);
   w->SetWrapped(q);
 
   return scope.Close(instance);
 }
 
-Handle<Value> QPointFWrap::X(const Arguments& args) {
-  HandleScope scope;
+NAN_METHOD(QPointFWrap::X) {
+  NanScope();
 
   QPointFWrap* w = ObjectWrap::Unwrap<QPointFWrap>(args.This());
   QPointF* q = w->GetWrapped();
 
-  return scope.Close(Number::New(q->x()));
+  NanReturnValue(Number::New(q->x()));
 }
 
-Handle<Value> QPointFWrap::Y(const Arguments& args) {
-  HandleScope scope;
+NAN_METHOD(QPointFWrap::Y) {
+  NanScope();
 
   QPointFWrap* w = ObjectWrap::Unwrap<QPointFWrap>(args.This());
   QPointF* q = w->GetWrapped();
 
-  return scope.Close(Number::New(q->y()));
+  NanReturnValue(Number::New(q->y()));
 }
 
-Handle<Value> QPointFWrap::IsNull(const Arguments& args) {
-  HandleScope scope;
+NAN_METHOD(QPointFWrap::IsNull) {
+  NanScope();
 
   QPointFWrap* w = ObjectWrap::Unwrap<QPointFWrap>(args.This());
   QPointF* q = w->GetWrapped();
 
-  return scope.Close(Boolean::New(q->isNull()));
+  NanReturnValue(Boolean::New(q->isNull()));
 }

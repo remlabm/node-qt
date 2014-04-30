@@ -16,18 +16,17 @@
 //       names of contributors may be used to endorse or promote products
 //       derived from this software without specific prior written permission.
 //
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
-// AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+// AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
 // ARE DISCLAIMED. IN NO EVENT SHALL ARTUR ADIB BE LIABLE FOR ANY
 // DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
 // (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
 // LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
 // ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF 
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OFa
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#define BUILDING_NODE_EXTENSION
 #include <node.h>
 #include "../qt_v8.h"
 #include "qpixmap.h"
@@ -48,7 +47,7 @@ void QPixmapWrap::Initialize(Handle<Object> target) {
   // Prepare constructor template
   Local<FunctionTemplate> tpl = FunctionTemplate::New(New);
   tpl->SetClassName(String::NewSymbol("QPixmap"));
-  tpl->InstanceTemplate()->SetInternalFieldCount(1);  
+  tpl->InstanceTemplate()->SetInternalFieldCount(1);
 
   // Prototype
   tpl->PrototypeTemplate()->Set(String::NewSymbol("width"),
@@ -60,64 +59,64 @@ void QPixmapWrap::Initialize(Handle<Object> target) {
   tpl->PrototypeTemplate()->Set(String::NewSymbol("fill"),
       FunctionTemplate::New(Fill)->GetFunction());
 
-  constructor = Persistent<Function>::New(tpl->GetFunction());
-  target->Set(String::NewSymbol("QPixmap"), constructor);
+  NanAssignPersistent(Function, constructor, tpl->GetFunction());
+  target->Set(String::NewSymbol("QPixmap"), tpl->GetFunction());
 }
 
-Handle<Value> QPixmapWrap::New(const Arguments& args) {
-  HandleScope scope;
+NAN_METHOD(QPixmapWrap::New) {
+  NanScope();
 
-  QPixmapWrap* w = new QPixmapWrap(args[0]->IntegerValue(), 
+  QPixmapWrap* w = new QPixmapWrap(args[0]->IntegerValue(),
       args[1]->IntegerValue());
   w->Wrap(args.This());
 
-  return args.This();
+  NanReturnValue(args.This());
 }
 
 Handle<Value> QPixmapWrap::NewInstance(QPixmap q) {
-  HandleScope scope;
-  
-  Local<Object> instance = constructor->NewInstance(0, NULL);
+  NanScope();
+
+  Local<Object> instance = NanPersistentToLocal(constructor)->NewInstance(0, NULL);
   QPixmapWrap* w = node::ObjectWrap::Unwrap<QPixmapWrap>(instance);
   w->SetWrapped(q);
 
   return scope.Close(instance);
 }
 
-Handle<Value> QPixmapWrap::Width(const Arguments& args) {
-  HandleScope scope;
+NAN_METHOD(QPixmapWrap::Width) {
+  NanScope();
 
   QPixmapWrap* w = ObjectWrap::Unwrap<QPixmapWrap>(args.This());
   QPixmap* q = w->GetWrapped();
 
-  return scope.Close(Number::New(q->width()));
+  NanReturnValue(Number::New(q->width()));
 }
 
-Handle<Value> QPixmapWrap::Height(const Arguments& args) {
-  HandleScope scope;
+NAN_METHOD(QPixmapWrap::Height) {
+  NanScope();
 
   QPixmapWrap* w = ObjectWrap::Unwrap<QPixmapWrap>(args.This());
   QPixmap* q = w->GetWrapped();
 
-  return scope.Close(Number::New(q->height()));
+  NanReturnValue(Number::New(q->height()));
 }
 
-Handle<Value> QPixmapWrap::Save(const Arguments& args) {
-  HandleScope scope;
+NAN_METHOD(QPixmapWrap::Save) {
+  NanScope();
 
   QPixmapWrap* w = ObjectWrap::Unwrap<QPixmapWrap>(args.This());
   QPixmap* q = w->GetWrapped();
 
   QString file(qt_v8::ToQString(args[0]->ToString()));
 
-  return scope.Close(Boolean::New( q->save(file) ));
+  NanReturnValue(Boolean::New( q->save(file) ));
 }
 
 // Supports:
 //    fill()
 //    fill(QColor color)
-Handle<Value> QPixmapWrap::Fill(const Arguments& args) {
-  HandleScope scope;
+NAN_METHOD(QPixmapWrap::Fill) {
+  NanScope();
 
   QPixmapWrap* w = ObjectWrap::Unwrap<QPixmapWrap>(args.This());
   QPixmap* q = w->GetWrapped();
@@ -133,5 +132,5 @@ Handle<Value> QPixmapWrap::Fill(const Arguments& args) {
     q->fill();
   }
 
-  return scope.Close(Undefined());
+  NanReturnUndefined();
 }
